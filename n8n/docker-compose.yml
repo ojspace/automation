@@ -8,3 +8,9 @@ services:
       - ./data:/home/node/.n8n
     environment:
       - N8N_HOST=0.0.0.0
+      - NODE_ENV=production
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin
+    user: "1000:1000"  # This sets the user:group ID
+    restart: always
