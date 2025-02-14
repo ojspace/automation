@@ -7,10 +7,36 @@ services:
     volumes:
       - ./data:/home/node/.n8n
     environment:
+      # Basic configuration
       - N8N_HOST=0.0.0.0
       - NODE_ENV=production
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_WEB_HOOK_URL=http://localhost:5678/
+      - N8N_EDITOR_BASE_URL=http://localhost:5678/
+      
+      # Security settings
       - N8N_BASIC_AUTH_ACTIVE=true
       - N8N_BASIC_AUTH_USER=admin
       - N8N_BASIC_AUTH_PASSWORD=admin
-    user: "1000:1000"  # This sets the user:group ID
+      - N8N_ENCRYPTION_KEY=your-secret-key-here
+      
+      # Execution settings
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+      - EXECUTIONS_DATA_SAVE_ON_PROGRESS=true
+      - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=true
+      
+      # Database settings (using SQLite by default)
+      - DB_TYPE=sqlite
+      - DB_SQLITE_VACUUM_ON_STARTUP=true
+      
+      # Workflow settings
+      - WORKFLOW_ENABLE_STATUS_CHECKS=true
+      - WORKFLOW_STATUS_CHECK_INTERVAL=10
+      
+      # System settings
+      - N8N_USER_FOLDER=/home/node/.n8n
+      - TZ=UTC
+    user: "1000:1000"
     restart: always
