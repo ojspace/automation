@@ -1,4 +1,4 @@
-# Automation Projects
+# Automation Magic for Docker
 
 This repository contains Docker-based automation projects using Langflow and n8n.
 
