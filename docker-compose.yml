@@ -1,10 +1,12 @@
+version: '3.8'
+
 services:
   n8n:
     image: n8nio/n8n:latest
     ports:
       - "5678:5678"
     volumes:
-      - ./data:/home/node/.n8n
+      - ./n8n/data:/home/node/.n8n
     environment:
       # Basic configuration
       - N8N_HOST=0.0.0.0
@@ -27,7 +29,7 @@ services:
       - EXECUTIONS_DATA_SAVE_ON_PROGRESS=true
       - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=true
       
-      # Database settings (using SQLite by default)
+      # Database settings
       - DB_TYPE=sqlite
       - DB_SQLITE_VACUUM_ON_STARTUP=true
       
@@ -39,4 +41,14 @@ services:
       - N8N_USER_FOLDER=/home/node/.n8n
       - TZ=UTC
     user: "1000:1000"
+    restart: always
+
+  langflow:
+    image: langflowai/langflow:latest
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./langflow/data:/data
+    environment:
+      - LANGFLOW_HOST=0.0.0.0
     restart: always

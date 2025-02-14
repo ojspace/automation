@@ -1,9 +1,0 @@
-services:
-  langflow:
-    image: langflowai/langflow:latest
-    ports:
-      - "7860:7860"
-    volumes:
-      - ./data:/data
-    environment:
-      - LANGFLOW_HOST=0.0.0.0

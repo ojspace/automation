@@ -1,46 +1,70 @@
-# Automation Magic for Docker
+# Automation Server
 
-This repository contains Docker-based automation projects using Langflow and n8n.
+This repository contains a Docker-based automation server combining Langflow and n8n in a single setup.
 
 ## Services
 
 ### 1. Langflow
 - AI workflow automation
 - Port: 7860
-- Directory: `/langflow`
+- Web UI: http://localhost:7860
 
 ### 2. n8n
 - Workflow automation platform
 - Port: 5678
-- Directory: `/n8n`
+- Web UI: http://localhost:5678
+- Default credentials: admin/admin
 
 ## Setup Instructions
 
 1. Clone the repository:
 ```bash
 git clone https://github.com/ojspace/automation.git
+cd automation
 ```
 
-2. Start Langflow:
+2. Start all services:
 ```bash
-cd langflow
-docker compose up -d
+docker-compose up -d
 ```
 
-3. Start n8n:
+## Directory Structure
+```
+./
+├── docker-compose.yml    # Main configuration file
+├── n8n/
+│   └── data/            # n8n data persistence
+└── langflow/
+    └── data/            # langflow data persistence
+```
+
+## Maintenance
+
+### View logs
 ```bash
-cd n8n
-docker compose up -d
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f n8n
+docker-compose logs -f langflow
 ```
 
-## Accessing Services
-- Langflow: http://localhost:7860
-- n8n: http://localhost:5678
+### Stop services
+```bash
+docker-compose down
+```
+
+### Update services
+```bash
+docker-compose pull
+docker-compose up -d
+```
 
 ## Requirements
 - Docker
-- Docker Compose
+- Docker Compose v2
 
 ## Notes
-- Each service has its own docker-compose configuration
-- Data is persisted in local volumes
+- All services are managed through a single docker-compose configuration
+- Data is persisted in local volumes under each service's directory
