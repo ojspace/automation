@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    restart: always
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    networks:
+      - app-network
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678"
+    volumes:
+      - ./n8n/data:/home/node/.n8n
+    environment:
+      # Basic configuration
+      - N8N_HOST=n8n
+      - NODE_ENV=production
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_EDITOR_BASE_URL=https://${SERVER_IP}
+      
+      # Security settings
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin
+      - N8N_ENCRYPTION_KEY=your-secret-key-here
+      - N8N_SECURE_COOKIE=true
+      
+      # Execution settings
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+      - EXECUTIONS_DATA_SAVE_ON_PROGRESS=true
+      - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=true
+      
+      # Database settings
+      - DB_TYPE=sqlite
+      - DB_SQLITE_VACUUM_ON_STARTUP=true
+      
+      # Workflow settings
+      - WORKFLOW_ENABLE_STATUS_CHECKS=true
+      - WORKFLOW_STATUS_CHECK_INTERVAL=10
+      
+      # System settings
+      - N8N_USER_FOLDER=/home/node/.n8n
+      - TZ=UTC
+    user: "1000:1000"
+    restart: always
+    networks:
+      - app-network
+
+  langflow:
+    image: langflowai/langflow:latest
+    ports:
+      - "7860"
+    volumes:
+      - ./langflow/data:/data
+    environment:
+      - LANGFLOW_HOST=0.0.0.0
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
