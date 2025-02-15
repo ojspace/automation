@@ -4,7 +4,7 @@ services:
   n8n:
     image: docker.n8n.io/n8nio/n8n
     ports:
-      - "5678:5678"
+      - "80:5678"
     volumes:
       - n8n_data:/home/node/.n8n
       - /local-files:/files
@@ -26,7 +26,7 @@ services:
   langflow:
     image: langflowai/langflow:latest
     ports:
-      - "7860:7860"
+      - "80:7860"
     volumes:
       - langflow_data:/data
     environment:
